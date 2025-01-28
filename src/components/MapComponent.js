@@ -58,19 +58,15 @@ const MapComponent = ({ searchQuery }) => {
     return null;
   };
 
-  // Function to handle search and move map to searched location
   const handleSearch = () => {
     if (searchQuery) {
       const coords = searchQuery.split(",");
 
-      // Check if coordinates are in the correct format (lat, lng)
       if (coords.length === 2) {
         const lat = parseFloat(coords[0].trim());
         const lng = parseFloat(coords[1].trim());
 
-        // Check if the parsed values are valid numbers
         if (!isNaN(lat) && !isNaN(lng)) {
-          // Move the map to the new coordinates
           mapRef.current.flyTo([lat, lng], ZOOM, { animate: true });
           setPosition({ lat, lng });
         } else {

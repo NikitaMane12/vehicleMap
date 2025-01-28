@@ -23,18 +23,33 @@ const RoutingComponent = ({ map, start, end }) => {
   useEffect(() => {
     if (!map || !start.length || !end.length) return;
 
-    // Add a marker to represent the car
     const marker = L.marker([start[0], start[1]], {
       icon: customCarImage,
     }).addTo(map);
+    const routingControl = L.Routing.control({
+      waypoints: [L.latLng(start[0], start[1]), L.latLng(end[0], end[1])],
+      routeWhileDragging: true,
+      createMarker: function (i, waypoint, n) {
+        return L.marker(waypoint.latLng, {
+          icon: customMarkerIcon,
+        });
+      },
+    })
+      .on("routesfound", function (e) {
+        console.log(e);
+        e.routes[0].coordinates.forEach((coord, index) => {
+          setTimeout(() => {
+            marker.setLatLng([coord.lat, coord.lng]);
+          }, 200 * index);
+        });
+      })
+      .addTo(map);
 
-    // Use routeData to simulate vehicle movement
     let timeoutIds = [];
 
     routeData.forEach((point, index) => {
       const { latitude, longitude, timestamp } = point;
 
-      // Calculate delay based on timestamp difference
       const delay =
         index === 0
           ? 0
