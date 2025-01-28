@@ -26,6 +26,7 @@ const RoutingComponent = ({ map, start, end }) => {
     const marker = L.marker([start[0], start[1]], {
       icon: customCarImage,
     }).addTo(map);
+
     const routingControl = L.Routing.control({
       waypoints: [L.latLng(start[0], start[1]), L.latLng(end[0], end[1])],
       routeWhileDragging: true,
@@ -65,7 +66,6 @@ const RoutingComponent = ({ map, start, end }) => {
     });
 
     return () => {
-      // Clean up timeouts
       timeoutIds.forEach((id) => clearTimeout(id));
       if (map) {
         marker.remove();
